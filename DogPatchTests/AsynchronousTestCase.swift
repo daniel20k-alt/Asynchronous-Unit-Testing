@@ -27,16 +27,26 @@
 /// THE SOFTWARE.
 
 import XCTest
+@testable import DogPatch
 
 final class AsynchronousTestCase: XCTestCase {
+  
+  let timeout: TimeInterval = 2
+  var expectation: XCTestExpectation!
+  
+  override func setUp() {
 
+    expectation = expectation(description: "server responds in reasonable time")
+  }
+  
+  
+  
   func test_noServerResponse() {
     let expectation = self.expectation(description: "Server responds in reasonable time")
-    defer {  waitForExpectations(timeout: 2) }
     
     let url = URL(string: "dogone")!
     URLSession.shared.dataTask(with: url) { data, response, error in
-      defer { expectation.fulfill() }
+      defer { self.expectation.fulfill() }
       
       XCTAssertNil(data)
       XCTAssertNil(response)
@@ -44,5 +54,30 @@ final class AsynchronousTestCase: XCTestCase {
 
     }
       .resume()
+  }
+  
+  func test_decodeDogs() {
+    let url = URL (string: "https://dogpatchserver.herokuapp.com/api/v1/dogs")!
+
+    URLSession.shared.dataTask(with: url) { data, response, error in
+      defer { self.expectation.fulfill() }
+      
+      XCTAssertNil(error)
+    
+      do {
+      let response = try XCTUnwrap(response as? HTTPURLResponse)
+    
+        XCTAssertEqual(response.statusCpde, 200)
+        
+        let data = try XCTUnwrap(data)
+        XCTAssertNoThrow(
+        try JSONDecoder().decode([Dog].self, from: data))
+      
+      }
+      cath {      }
+    }
+    .resume()
+    
+    waitForExpectations(timeout: timeout)
   }
 }
