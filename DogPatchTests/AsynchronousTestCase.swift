@@ -30,54 +30,48 @@ import XCTest
 @testable import DogPatch
 
 final class AsynchronousTestCase: XCTestCase {
-  
   let timeout: TimeInterval = 2
   var expectation: XCTestExpectation!
-  
-  override func setUp() {
 
-    expectation = expectation(description: "server responds in reasonable time")
+  override func setUp() {
+    expectation = expectation(description: "Server responds in reasonable time")
   }
-  
   
   
   func test_noServerResponse() {
-    let expectation = self.expectation(description: "Server responds in reasonable time")
-    
-    let url = URL(string: "dogone")!
+    let url = URL(string: "doggone")!
     URLSession.shared.dataTask(with: url) { data, response, error in
       defer { self.expectation.fulfill() }
-      
+
       XCTAssertNil(data)
       XCTAssertNil(response)
       XCTAssertNotNil(error)
-
     }
-      .resume()
+    .resume()
+
+    waitForExpectations(timeout: timeout)
   }
   
   func test_decodeDogs() {
-    let url = URL (string: "https://dogpatchserver.herokuapp.com/api/v1/dogs")!
-
+    let url = URL(string: "https://dogpatchserver.herokuapp.com/api/v1/dogs")!
     URLSession.shared.dataTask(with: url) { data, response, error in
       defer { self.expectation.fulfill() }
-      
+
       XCTAssertNil(error)
-    
+
       do {
-      let response = try XCTUnwrap(response as? HTTPURLResponse)
-    
-        XCTAssertEqual(response.statusCpde, 200)
-        
+        let response = try XCTUnwrap(response as? HTTPURLResponse)
+        XCTAssertEqual(response.statusCode, 200)
+
         let data = try XCTUnwrap(data)
         XCTAssertNoThrow(
-        try JSONDecoder().decode([Dog].self, from: data))
-      
+          try JSONDecoder().decode([Dog].self, from: data)
+        )
       }
-      cath {      }
+      catch { }
     }
     .resume()
-    
+
     waitForExpectations(timeout: timeout)
   }
 }
