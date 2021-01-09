@@ -30,7 +30,7 @@ import XCTest
 @testable import DogPatch
 
 final class AsynchronousTestCase: XCTestCase {
-  let timeout: TimeInterval = 20
+  let timeout: TimeInterval = 2
   var expectation: XCTestExpectation!
   
   override func setUp() {
@@ -50,6 +50,52 @@ final class AsynchronousTestCase: XCTestCase {
     .resume()
     
     waitForExpectations(timeout: timeout)
+  }
+  
+  
+  func test_decodeDogtors() {
+    struct OrthopedicDogtor: Decodable {
+      let id: String
+      let sellerID: String
+      let about: String
+      let birthday: Date
+      let breed: String
+      let breederRating: Double
+      let cost: Decimal
+      let created: Date
+      let imageURL: URL
+      let name: String
+      
+      let bones: [Int]
+      
+    }
+    
+    URLSession.shared.dataTask(with: URL(string: "https://dogpatchserver.herokuapp.com/api/v1/dogs")!) {
+      data, response, error in
+      defer { self.expectation.fulfill()}
+      
+      XCTAssertNil(error)
+      XCTAssertEqual((response as? HTTPURLResponse)?.statusCode, 200
+    )
+      do {
+        XCTAssertThrowsError(try JSONDecoder().decode([OrthopedicDogtor].self, from: try XCTUnwrap(data)))
+        
+        { error in
+          switch error {
+          case DecodingError.keyNotFound(let key, _):
+            XCTAssertEqual(key.stringValue, "bones")
+          default:
+            XCTFail("\(error)")
+          }
+        }
+      }
+      
+      catch { }
+    }
+    .resume()
+    
+    waitForExpectations(timeout: timeout)
+    
   }
   
   func test_404() {
@@ -80,4 +126,3 @@ final class AsynchronousTestCase: XCTestCase {
     waitForExpectations(timeout: timeout)
   }
 }
-
