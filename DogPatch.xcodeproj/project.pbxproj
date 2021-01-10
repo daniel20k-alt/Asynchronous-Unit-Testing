@@ -30,6 +30,7 @@
 		95C82A1C233BC7B900CA2CF9 /* UIViewController+StoryboardCreatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C82A1B233BC7B900CA2CF9 /* UIViewController+StoryboardCreatable.swift */; };
 		95C82A1E233BC7D400CA2CF9 /* LogoNavigationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C82A1D233BC7D400CA2CF9 /* LogoNavigationItem.swift */; };
 		EE2DAA4225A3C44B00CB7888 /* AsynchronousTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2DAA4125A3C44B00CB7888 /* AsynchronousTestCase.swift */; };
+		EE2DAA5225ABA37100CB7888 /* dogs.json in Resources */ = {isa = PBXBuildFile; fileRef = EE2DAA5125ABA37100CB7888 /* dogs.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		EE2DAA3F25A3C44A00CB7888 /* DogPatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DogPatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE2DAA4125A3C44B00CB7888 /* AsynchronousTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousTestCase.swift; sourceTree = "<group>"; };
 		EE2DAA4325A3C44B00CB7888 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EE2DAA5125ABA37100CB7888 /* dogs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = dogs.json; path = "../../../../P02E05 Test Doubles/Final/DogPatch/DogPatchTests/dogs.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,6 +265,7 @@
 		EE2DAA4025A3C44A00CB7888 /* DogPatchTests */ = {
 			isa = PBXGroup;
 			children = (
+				EE2DAA5125ABA37100CB7888 /* dogs.json */,
 				EE2DAA4125A3C44B00CB7888 /* AsynchronousTestCase.swift */,
 				EE2DAA4325A3C44B00CB7888 /* Info.plist */,
 			);
@@ -363,6 +366,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE2DAA5225ABA37100CB7888 /* dogs.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

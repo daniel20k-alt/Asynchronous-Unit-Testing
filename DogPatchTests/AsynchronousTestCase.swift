@@ -125,4 +125,52 @@ final class AsynchronousTestCase: XCTestCase {
     
     waitForExpectations(timeout: timeout)
   }
+  
+  func test_client() throws {
+  
+    struct FakeDataTaskMaker: DataTaskMaker {
+     static let dummyURL = URL(string: "dummy")!
+      
+      init() throws {
+        let testBundle = Bundle(for: AsynchronousTestCase.self)
+        let url = try XCTUnwrap (
+          testBundle.url(forResource: "dogs", withExtension: "json"))
+        
+        data = try Data(contentsOf: url)
+      }
+      
+      let data: Data
+      
+      func dataTask(with _: URL,
+                    completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        
+        completionHandler(
+        data,
+          HTTPURLResponse(url: Self.dummyURL,
+                          statusCode: 200,
+                          httpVersion: nil,
+                          headerFields: nil),
+        nil)
+        
+        final class FakeDataTask: URLSessionDataTask {
+          override init() { }
+        }
+          return FakeDataTask()
+  
+      }
+  }
+    
+
+    _ =  DogPatchClient.init(baseURL: FakeDataTaskMaker.dummyURL,
+                             session: try FakeDataTaskMaker(),
+                             responseQueue: nil
+    ).getDogs { dogs, error in
+    defer { self.expectation.fulfill()}
+    
+    XCTAssertEqual(dogs?.count, 4)
+    XCTAssertNil(error)
+    }
+    waitForExpectations(timeout: timeout)
+    
+  }
 }
